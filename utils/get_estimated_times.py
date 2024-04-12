@@ -1,4 +1,3 @@
-import time
 import requests
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
@@ -14,33 +13,41 @@ def fetch_data(stop):
     else:
         return None
 
-
-
 def get_estimated_route_stop_times(route):
     if route not in route_stops:
         raise ValueError(f"Route {route} is not in the route_stops dictionary")
     
     res = []
-    
+    # Fetch data concurrently. Takes ~1 second instead of ~6 seconds
     with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
         future_to_stop = {executor.submit(fetch_data, stop): stop for stop in route_stops[route]}
-        
         for future in as_completed(future_to_stop):
             data = future.result()
             if data:
-                res.append(str(data) + '\n')
-    
-    return ''.join(res)
+                res.append(data)
+    return res
 
 def get_estimated_bus_stop_times(bus_id, estimated_route_stop_times):
+    bus_stop_times = {}
     for stop in estimated_route_stop_times:
-        if bus_id in stop:
-            return stop
+        bus_times = next(iter(stop["etas"].values()))['etas']
+        stopNum = next(iter(stop["etas"].keys()))
+        check = False
+        for time in bus_times:
+            if time["bus_id"] == bus_id:
+                bus_stop_times[stopNum] = time["avg"]
+                check = True
+        if not check:
+            raise ValueError(f"Bus {bus_id} is not in the data at stop {stopNum}")
 
-
+    # reorder the stops, which are assorted because of the concurrency
+    key_order = [str(key) for key in route_stops[1]]
+    ordered_times = {key: bus_stop_times[key] for key in key_order if key in bus_stop_times}
+    return ordered_times
 
 
 if __name__ == "__main__":
-    print(get_estimated_route_stop_times(1))
-    
+    stop_times = get_estimated_route_stop_times(1)
+    bus_times = get_estimated_bus_stop_times(21800, stop_times)
+    print(bus_times)
     
