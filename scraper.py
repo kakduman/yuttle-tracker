@@ -2,8 +2,8 @@ import time
 import requests
 import os
 
-import time_conversion
-import path_conversion
+from utils.path_conversion import find_progress
+from utils.time_conversion import convert_to_fraction_of_day
 
 # data is being fetched from https://yale.downtownerapp.com/routes_buses.php
 
@@ -27,7 +27,7 @@ class Route:
         if bus["lastUpdate"] is None:
             return
         
-        progress, _ = path_conversion.find_progress(bus["lat"], bus["lon"])
+        progress, _ = find_progress(bus["lat"], bus["lon"])
 
         data_dict = {
             "lat": bus["lat"],
@@ -35,7 +35,7 @@ class Route:
             "pathPercent": progress,
             "lastStop": bus["lastStop"],
             "lastUpdate": bus["lastUpdate"],
-            "dayPercent": time_conversion.convert_to_fraction_of_day(bus["lastUpdate"])
+            "dayPercent": convert_to_fraction_of_day(bus["lastUpdate"])
         }
         
         with open(f'data/bus_{self.route}_{id}.txt', 'a') as file:
