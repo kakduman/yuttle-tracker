@@ -27,6 +27,10 @@ def haversine(lat1, lon1, lat2, lon2):
     return distance
 
 def find_progress(lat, lon, points=points, distances=distances, total_distance=total_distances):
+    '''
+    Takes in a latitude and a longitude.
+    Returns the progress along the path and the closest point on the path.
+    '''
     min_distance = float('inf')
     closest_point = None
 
@@ -78,7 +82,7 @@ def prepare_data(path):
     print(distances)
     print(sum(distances))
     
-# Example usage
-lat, lon = 41.326914, -72.922289
-progress, closest_point = find_progress(lat, lon)
-print(f"Progress: {progress}, Closest point on path: {closest_point}")
+# # Example usage
+# lat, lon = 41.326914, -72.922289
+# progress, closest_point = find_progress(lat, lon)
+# print(f"Progress: {progress}, Closest point on path: {closest_point}")
