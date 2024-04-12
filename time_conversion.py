@@ -7,6 +7,10 @@ import requests
 json_data = requests.get('https://yale.downtownerapp.com/routes_buses.php')
 
 def convert_to_fraction_of_day(unix_time):
+    '''
+    Convert a UNIX timestamp to a fraction of the day.
+    The fraction of the day is the number of seconds since 7 AM divided by the total seconds in the range 7 AM to 6 PM.
+    '''
     # Convert UNIX timestamp to a datetime object in UTC
     timestamp_utc = datetime.datetime.utcfromtimestamp(unix_time)
     # print(timestamp_utc)
@@ -23,7 +27,7 @@ def convert_to_fraction_of_day(unix_time):
     
     # Calculate the seconds since 7 AM
     seconds_since_start = (timestamp_edt - start_time).total_seconds()
-    print(seconds_since_start)
+    # print(seconds_since_start)
     
     # Normalize the seconds since 7 AM by the total seconds to get a fraction
     if seconds_since_start < 0 or seconds_since_start > total_seconds:
@@ -47,4 +51,16 @@ fractions_of_day = [
     for bus in bus_data if bus["route"] == 1
 ]
 
-print(fractions_of_day)
+# print(fractions_of_day)
+
+
+# EXAMPLE USAGE
+# Takes a UNIX timestamp and returns a fraction of the day
+unix_time = 1712930964
+fraction_of_day = convert_to_fraction_of_day(unix_time)
+if fraction_of_day is not None:
+    print(f"Fraction of the day for UNIX timestamp {unix_time}: {fraction_of_day}")
+
+
+
+
