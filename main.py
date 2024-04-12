@@ -3,7 +3,7 @@ import requests
 
 # https://yale.downtownerapp.com/routes_buses.php
 
-WAIT_TIME = 30 # time between getting data
+WAIT_TIME = 10 # time between getting data
 
 with open('data.txt', 'a') as file:
     while True:
