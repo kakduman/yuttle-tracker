@@ -35,7 +35,7 @@ def convert_to_fraction_of_day(unix_time):
         return None
     else:
         fraction_of_day = seconds_since_start / total_seconds
-        return fraction_of_day
+        return round(fraction_of_day, 5)
 
 
 
