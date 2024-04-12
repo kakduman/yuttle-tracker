@@ -42,6 +42,7 @@ class Route:
             file.write(str(data_dict) + '\n')
 
 
+# Select which routes to track here
 blue_line = Route(1)
 
 while True:
