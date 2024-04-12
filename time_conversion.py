@@ -37,30 +37,26 @@ def convert_to_fraction_of_day(unix_time):
         fraction_of_day = seconds_since_start / total_seconds
         return fraction_of_day
 
-# Decode JSON data to a Python object
-bus_data = json.loads(json_data.text)
-
-# Filter bus data for route 1 and compute fractions of the day
-fractions_of_day = [
-    {
-        "id": bus["id"],
-        "name": bus["name"],
-        "fraction_of_day": convert_to_fraction_of_day(bus["lastUpdate"]),
-        "real_time": bus["lastUpdate"]
-    }
-    for bus in bus_data if bus["route"] == 1
-]
-
-# print(fractions_of_day)
 
 
-# EXAMPLE USAGE
-# Takes a UNIX timestamp and returns a fraction of the day
-unix_time = 1712930964
-fraction_of_day = convert_to_fraction_of_day(unix_time)
-if fraction_of_day is not None:
-    print(f"Fraction of the day for UNIX timestamp {unix_time}: {fraction_of_day}")
+if __name__ == '__main__':
+    bus_data = json.loads(json_data.text)
 
+    # Filter bus data for route 1 and compute fractions of the day
+    fractions_of_day = [
+        {
+            "id": bus["id"],
+            "name": bus["name"],
+            "fraction_of_day": convert_to_fraction_of_day(bus["lastUpdate"]),
+            "real_time": bus["lastUpdate"]
+        }
+        for bus in bus_data if bus["route"] == 1
+    ]
 
+    unix_time = 1712930964
+    fraction_of_day = convert_to_fraction_of_day(unix_time)
+    if fraction_of_day is not None:
+        print(f"Fraction of the day for UNIX timestamp {unix_time}: {fraction_of_day}")
+    print('finished')
 
 

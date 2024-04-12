@@ -2,6 +2,8 @@ import time
 import requests
 import os
 
+import time_conversion
+
 # data is being fetched from https://yale.downtownerapp.com/routes_buses.php
 
 WAIT_TIME = 10 # time between getting data
@@ -23,12 +25,15 @@ class Route:
     
     def record_bus(self, bus):
         id = bus['id']
+        if bus["lastUpdate"] is None:
+            return
 
         data_dict = {
             "lat": bus["lat"],
             "lon": bus["lon"],
             "lastStop": bus["lastStop"],
             "lastUpdate": bus["lastUpdate"],
+            "timeFraction": time_conversion.convert_to_fraction_of_day(bus["lastUpdate"])
         }
         
         with open(f'data/bus_{self.route}_{id}.txt', 'a') as file:
