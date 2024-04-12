@@ -26,7 +26,7 @@ class Route:
             self.record_bus(bus, estimated_route_stop_times)
             
     def record_bus(self, bus, estimated_route_stop_times):
-        id = bus['id']
+        name = bus['name'][1:]
         if bus["lastUpdate"] is None:
             return
         
@@ -41,10 +41,10 @@ class Route:
             "lastStop": bus["lastStop"],
             "lastUpdate": bus["lastUpdate"],
             "dayPercent": convert_to_fraction_of_day(bus["lastUpdate"]),
-            "estimatedTimes": get_estimated_bus_stop_times(id, estimated_route_stop_times)
+            "estimatedTimes": get_estimated_bus_stop_times(name, estimated_route_stop_times)
         }
         
-        with open(f'data/bus_{self.route}_{id}.txt', 'a') as file:
+        with open(f'data/bus_{self.route}_{name}.txt', 'a') as file:
             file.write(str(data_dict) + '\n')
 
 

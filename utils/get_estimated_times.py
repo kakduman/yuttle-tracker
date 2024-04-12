@@ -27,18 +27,20 @@ def get_estimated_route_stop_times(route):
                 res.append(data)
     return res
 
-def get_estimated_bus_stop_times(bus_id, estimated_route_stop_times):
+def get_estimated_bus_stop_times(bus_name, estimated_route_stop_times):
     bus_stop_times = {}
     for stop in estimated_route_stop_times:
         bus_times = next(iter(stop["etas"].values()))['etas']
         stopNum = next(iter(stop["etas"].keys()))
         check = False
         for time in bus_times:
-            if time["bus_id"] == bus_id:
+            print(int(time["bus_name"][1:]), bus_name)
+            if time["bus_name"][1:] == bus_name:
+                print('here')
                 bus_stop_times[stopNum] = time["avg"]
                 check = True
         if not check:
-            raise ValueError(f"Bus {bus_id} is not in the data at stop {stopNum}")
+            raise ValueError(f'Bus {bus_name} is not in the data at stop {stopNum}')
 
     # reorder the stops, which are assorted because of the concurrency
     key_order = [str(key) for key in route_stops[1]]
@@ -48,6 +50,6 @@ def get_estimated_bus_stop_times(bus_id, estimated_route_stop_times):
 
 if __name__ == "__main__":
     stop_times = get_estimated_route_stop_times(1)
-    bus_times = get_estimated_bus_stop_times(21800, stop_times)
+    bus_times = get_estimated_bus_stop_times(42, stop_times)
     print(bus_times)
     
