@@ -1,6 +1,7 @@
 import time
 import requests
 import os
+from math import sin, cos, pi
 
 from utils.path_conversion import find_progress
 from utils.time_conversion import convert_to_fraction_of_day
@@ -33,6 +34,8 @@ class Route:
             "lat": bus["lat"],
             "lon": bus["lon"],
             "pathPercent": progress,
+            "sinProgress": sin(2 * pi * progress),
+            "cosProgress": cos(2 * pi * progress),
             "lastStop": bus["lastStop"],
             "lastUpdate": bus["lastUpdate"],
             "dayPercent": convert_to_fraction_of_day(bus["lastUpdate"])
