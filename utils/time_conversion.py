@@ -3,14 +3,18 @@ import json
 import requests
 import pytz
 
-# Example JSON string (replace this with your actual JSON data)
-# json_data = '[{"id":21785,"name":"#122","lat":41.297187,"lon":-72.951746,"heading":82,"route":8,"lastStop":59,"lastUpdate":1712930964},{"id":21786,"name":"#329","lat":41.256206,"lon":-72.9903,"heading":287,"route":9,"lastStop":23,"lastUpdate":1712930958},{"id":21787,"name":"#314","lat":41.272138,"lon":-72.972214,"heading":46,"route":10,"lastStop":122,"lastUpdate":1712930962}]'
 json_data = requests.get('https://yale.downtownerapp.com/routes_buses.php')
 
 def convert_to_fraction_of_day(unix_time):
     '''
     Convert a UNIX timestamp to a fraction of the day.
     The fraction of the day is the number of seconds since 7 AM divided by the total seconds in the range 7 AM to 6 PM.
+    
+    Parameters:
+    unix_time (int): The UNIX timestamp to convert.
+    
+    Returns:
+    float: The fraction of the day, or None if the UNIX timestamp is outside the range 7 AM to 6 PM.
     '''
     # Convert UNIX timestamp to a datetime object in UTC
     edt = pytz.timezone('America/New_York')
@@ -30,7 +34,7 @@ def convert_to_fraction_of_day(unix_time):
     
     # Normalize the seconds since 7 AM by the total seconds to get a fraction
     if seconds_since_start < 0 or seconds_since_start > total_seconds:
-        # Time is outside the 7 AM to 6 PM range, consider how you want to handle this
+        # Time is outside the 7 AM to 6 PM range
         return None
     else:
         fraction_of_day = seconds_since_start / total_seconds
@@ -39,6 +43,12 @@ def convert_to_fraction_of_day(unix_time):
 def get_weekday(unix_time):
     '''
     Convert a UNIX timestamp to a weekday.
+    
+    Parameters:
+    unix_time (int): The UNIX timestamp to convert.
+    
+    Returns:
+    int: The weekday as an integer, where Monday is 0 and Sunday is 6.
     '''
     edt = pytz.timezone('America/New_York')
     current_time_edt = datetime.datetime.now(pytz.utc).astimezone(edt)
