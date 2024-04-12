@@ -34,9 +34,7 @@ def get_estimated_bus_stop_times(bus_name, estimated_route_stop_times):
         stopNum = next(iter(stop["etas"].keys()))
         check = False
         for time in bus_times:
-            print(int(time["bus_name"][1:]), bus_name)
             if time["bus_name"][1:] == bus_name:
-                print('here')
                 bus_stop_times[stopNum] = time["avg"]
                 check = True
         if not check:
@@ -50,6 +48,6 @@ def get_estimated_bus_stop_times(bus_name, estimated_route_stop_times):
 
 if __name__ == "__main__":
     stop_times = get_estimated_route_stop_times(1)
-    bus_times = get_estimated_bus_stop_times(42, stop_times)
+    bus_times = get_estimated_bus_stop_times("42", stop_times)
     print(bus_times)
     
