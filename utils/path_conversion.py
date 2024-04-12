@@ -11,7 +11,7 @@ total_distances = sum(distances)
 
 def haversine(lat1, lon1, lat2, lon2):
     # Radius of Earth in kilometers
-    R = 6371
+    R = 6378
 
     # Convert degrees to radians
     lat1, lon1, lat2, lon2 = map(math.radians, [lat1, lon1, lat2, lon2])
