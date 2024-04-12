@@ -1,14 +1,16 @@
 import time
 import requests
+import os
 
-# https://yale.downtownerapp.com/routes_buses.php
+# data is being fetched from https://yale.downtownerapp.com/routes_buses.php
 
 WAIT_TIME = 10 # time between getting data
-# record the time (temp), lat/long (temp), route, bus, stop num
 
 class Route:
     def __init__(self, route):
         self.route = route
+        os.makedirs('./data', exist_ok=True)
+
     
     def record_buses(self):
         response = requests.get('https://yale.downtownerapp.com/routes_buses.php')
@@ -29,7 +31,7 @@ class Route:
             "lastUpdate": bus["lastUpdate"],
         }
         
-        with open(f'bus_{self.route}_{id}.txt', 'a') as file:
+        with open(f'data/bus_{self.route}_{id}.txt', 'a') as file:
             file.write(str(data_dict) + '\n')
 
 
