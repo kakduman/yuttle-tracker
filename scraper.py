@@ -44,7 +44,7 @@ class Route:
             "estimatedTimes": get_estimated_bus_stop_times(id, estimated_route_stop_times)
         }
         
-        with open(f'data/bus_{self.route}_{id}.txt', 'a') as file:
+        with open(f'data/live_data/bus_{self.route}_{id}.txt', 'a') as file:
             file.write(str(data_dict) + '\n')
 
 
