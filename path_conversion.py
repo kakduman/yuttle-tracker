@@ -81,8 +81,10 @@ def prepare_data(path):
     print(points)
     print(distances)
     print(sum(distances))
+
+if __name__ == '__main__':
+    # Example usage
+    lat, lon = 41.326914, -72.922289
+    progress, closest_point = find_progress(lat, lon)
+    print(f"Progress: {progress}, Closest point on path: {closest_point}")
     
-# # Example usage
-# lat, lon = 41.326914, -72.922289
-# progress, closest_point = find_progress(lat, lon)
-# print(f"Progress: {progress}, Closest point on path: {closest_point}")
