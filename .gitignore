@@ -1,6 +1,7 @@
 **/data.txt
 **/bus*.txt
 data/
+.DS_Store
 
 
 # Byte-compiled / optimized / DLL files
