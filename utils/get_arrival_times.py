@@ -21,6 +21,7 @@ def append_arrival_times(input_file, output_file):
 
     with open(input_file, "r") as file:
         previously_recorded_stop = None
+        previous_day_percent = 100
         updated_lines = []
         # reverse the lines
         lines = file.readlines()
@@ -34,6 +35,7 @@ def append_arrival_times(input_file, output_file):
             if not previously_recorded_stop:
                 previously_recorded_stop = line["lastStop"]
                 updated_lines.append(line)
+                
                 continue
             current_stop = line["lastStop"]
             if current_stop != previously_recorded_stop:
