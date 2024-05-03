@@ -28,6 +28,9 @@ def append_arrival_times(input_file, output_file):
         for line in lines:
             # convert raw text to dictionary
             line = eval(line)
+            # if this occurred on Monday, April 22 (1716350400 - 1716436799), get rid of it because the protests messed up our data
+            if 1716350400 <= line["lastUpdate"] <= 1716436799:
+                continue
             if not previously_recorded_stop:
                 previously_recorded_stop = line["lastStop"]
                 updated_lines.append(line)
