@@ -76,4 +76,4 @@ def load_estimate_dataset(route=1):
 
 if __name__ == '__main__':
     dataset = load_dataset()
-    print(dataset[43801])
+    print(len(dataset))
