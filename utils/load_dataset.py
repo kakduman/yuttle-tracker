@@ -9,21 +9,28 @@ def read_compressed_data(file_path):
         data = pickle.load(file)
     return data
 
-def add_bus_data(dataset, file_path):
+def add_bus_data(dataset, file_path, predictions_only=False):
     raw_processed_data = read_compressed_data(file_path)
     for raw_processed_datapoint in raw_processed_data:
         if "arrivals" not in raw_processed_datapoint:
             continue
 
-        clean_datapoint = [
-            raw_processed_datapoint["pathPercent"],
-            raw_processed_datapoint["sinProgress"],
-            raw_processed_datapoint["cosProgress"],
-            raw_processed_datapoint["lastStop"],
-            raw_processed_datapoint["dayPercent"],
-            raw_processed_datapoint["weekday"],
-            raw_processed_datapoint["arrivals"] # this is a dictionary containing 32 ground truths!
-        ]
+        if predictions_only:
+            clean_datapoint = [
+                raw_processed_datapoint["estimatedTimes"],
+                raw_processed_datapoint["arrivals"]
+            ]
+        else:
+            clean_datapoint = [
+                raw_processed_datapoint["pathPercent"],
+                raw_processed_datapoint["sinProgress"],
+                raw_processed_datapoint["cosProgress"],
+                raw_processed_datapoint["lastStop"],
+                raw_processed_datapoint["dayPercent"],
+                raw_processed_datapoint["weekday"],
+                raw_processed_datapoint["arrivals"] # this is a dictionary containing 32 ground truths!
+            ]
+
         dataset.append(clean_datapoint)
 
 def load_dataset(route=1):
@@ -42,20 +49,8 @@ def load_dataset(route=1):
         if filename.startswith(f"bus_{route}_") and filename.endswith(".json.gz"):
             file_path = os.path.join(DATA_DIRECTORY, filename)
             if os.path.isfile(file_path):
-                add_bus_data(dataset, file_path)
+                add_bus_data(dataset, file_path, predictions_only=False)
     return dataset
-
-def add_bus_prediction_data(dataset, file_path):
-    raw_processed_data = read_compressed_data(file_path)
-    for raw_processed_datapoint in raw_processed_data:
-        if "arrivals" not in raw_processed_datapoint:
-            continue
-        
-        clean_datapoint = [
-            raw_processed_datapoint["estimatedTimes"],
-            raw_processed_datapoint["arrivals"]
-        ]
-        dataset.append(clean_datapoint)
 
 def load_estimate_dataset(route=1):
     """
@@ -72,10 +67,10 @@ def load_estimate_dataset(route=1):
         if filename.startswith(f"bus_{route}_") and filename.endswith(".json.gz"):
             file_path = os.path.join(DATA_DIRECTORY, filename)
             if os.path.isfile(file_path):
-                add_bus_prediction_data(dataset, file_path)
+                add_bus_data(dataset, file_path, predictions_only=True)
     return dataset
 
 
 if __name__ == '__main__':
-    dataset = load_dataset()
+    dataset = load_estimate_dataset()
     print(dataset[100])
