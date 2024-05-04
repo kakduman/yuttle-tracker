@@ -17,7 +17,7 @@ def add_bus_data(dataset, file_path, predictions_only=False):
 
         if predictions_only:
             clean_datapoint = [
-                raw_processed_datapoint["estimatedTimes"],
+                {i: value for i, (key, value) in enumerate(raw_processed_datapoint["estimatedTimes"].items(), start=1)},
                 raw_processed_datapoint["arrivals"]
             ]
         else:
