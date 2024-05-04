@@ -1,4 +1,4 @@
-import utils.load_dataset as ld
+import load_dataset as ld
 import numpy as np
 
 def calculate_metrics(estimated_times, arrivals):
@@ -9,9 +9,9 @@ def calculate_metrics(estimated_times, arrivals):
         estimated_times (dict): A dictionary of estimated arrival times for each stop.
         arrivals (dict): A dictionary of actual arrival times for each stop.
 
-    Returns:
-        tuple: A tuple containing the MAE and MSE between estimated and actual arrival times.
-
+    Returns, as two separate values:
+        mae
+        mse
     '''
 
     # Find common stops between estimatedTimes and arrivals
@@ -65,16 +65,16 @@ def calculate_mae_data(predicted_times, true_arrivals):
 
 if __name__ == '__main__':
     dataset = ld.load_estimate_dataset()
-
-    # Make a test dataset of the first 10 entries
-    # dataset = dataset[:10]
+    # print(dataset[0])
 
     metrics = [calculate_metrics(pair[0], pair[1]) for pair in dataset if pair[0] and pair[1]]
     valid_metrics = [m for m in metrics if m[0] is not None and m[1] is not None]
     if valid_metrics:
         avg_mae = np.mean([m[0] for m in valid_metrics])
         avg_mse = np.mean([m[1] for m in valid_metrics])
+        avg_distance = avg_mae * 60 * 11
         print(f"Average MAE: {avg_mae:.4f}")
         print(f"Average MSE: {avg_mse:.4f}")
+        print(f"Average Distance: {avg_distance:.4f}")
     else:
         print("No valid metrics found.")

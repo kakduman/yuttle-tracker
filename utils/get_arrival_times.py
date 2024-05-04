@@ -58,11 +58,14 @@ def append_arrival_times(input_file, output_file, route=1):
                 continue
             
             # we're actually going to process this point. Might not add it to data, but we need to process it in some way
-            unix_time = line["lastUpdate"]
             if 0.62 < line["pathPercent"] < 0.75:
                 heading = 1
             elif 0.94 < line["pathPercent"]:
                 heading = 0
+                
+            # if line["lastStop"] == 0:
+            #     unix_time = line["lastUpdate"]
+            #     continue
                 
             line["lastStop"] = find_most_recent_stop(line["pathPercent"], heading)
                 
@@ -75,9 +78,10 @@ def append_arrival_times(input_file, output_file, route=1):
                 line["pathPercent"] = 0.91
 
             # when the date changes (time decreases by MORE than 10800 in one go), reset the arrivals_dict
-            unix_time = line["lastUpdate"]
             if line["lastUpdate"] < (unix_time - 10800):
                 reset_arrivals_dict(arrivals_dict, route)
+            
+            unix_time = line["lastUpdate"]
             
             if not prev_stop: 
                 prev_stop = line["lastStop"]
