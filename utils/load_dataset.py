@@ -12,16 +12,16 @@ def read_compressed_data(file_path):
     return data
 
 def add_bus_data(dataset, file_path):
-    raw_data = read_compressed_data(file_path)
-    for raw_datapoint in raw_data:
+    raw_processed_data = read_compressed_data(file_path)
+    for raw_processed_datapoint in raw_processed_data:
         clean_datapoint = [
-            raw_datapoint["pathPercent"],
-            raw_datapoint["sinProgress"],
-            raw_datapoint["cosProgress"],
-            raw_datapoint["lastStop"],
-            raw_datapoint["dayPercent"],
-            raw_datapoint["weekday"],
-            raw_datapoint["estimatedTimes"] # this is a dictionary containing 32 ground truths!
+            raw_processed_datapoint["pathPercent"],
+            raw_processed_datapoint["sinProgress"],
+            raw_processed_datapoint["cosProgress"],
+            raw_processed_datapoint["lastStop"],
+            raw_processed_datapoint["dayPercent"],
+            raw_processed_datapoint["weekday"],
+            raw_processed_datapoint["estimatedTimes"] # this is a dictionary containing 32 ground truths!
         ]
         dataset.append(clean_datapoint)
 
