@@ -67,11 +67,11 @@ def append_arrival_times(input_file, output_file):
                     try:
                         arrival_estimate = round(estimate_in_dayTime + line["dayPercent"], 5)
                         line["estimatedTimes"][estimate] = arrival_estimate
-                        line["arrivals"] = dict(arrivals_dict)
-                        updated_lines.append(line)
                     except Exception as e:
                         print(f"Error appending updated lines: {e}")
                         continue
+                line["arrivals"] = dict(arrivals_dict)
+                updated_lines.append(line)
                 continue
             current_stop = line["lastStop"]
             if current_stop != previously_recorded_stop:
@@ -90,7 +90,7 @@ def append_arrival_times(input_file, output_file):
                 except Exception as e:
                     print(f"Error appending updated lines: {e}")
                     continue
-            updated_lines.reverse()
+        updated_lines.reverse()
         
         # save to a new file .json, make directory if it doesn't exist
         os.makedirs(os.path.dirname(output_file), exist_ok=True)
