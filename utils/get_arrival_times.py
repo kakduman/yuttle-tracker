@@ -1,5 +1,8 @@
 import json
 import os
+import gzip
+import pickle
+
 
 route_stops = {1: [10, 2, 5, 52, 41, 20, 108, 106, 34, 101, 47, 100, 102, 105, 69, 139, 136, 130, 129, 140, 133, 135, 138, 97, 66, 63, 42, 98, 38, 39, 72, 43]}
 arrivals_dict = {}
@@ -82,8 +85,8 @@ def append_arrival_times(input_file, output_file):
                     continue
             updated_lines.reverse()
         
-        # save to a new file as pretty json, make directory if it doesn't exist
+        # save to a new file .json, make directory if it doesn't exist
         os.makedirs(os.path.dirname(output_file), exist_ok=True)
-        with open(output_file, "w") as new_file:
-            json.dump(updated_lines, new_file, indent=4)
-            
+        with gzip.open(output_file + '.gz', 'wb') as new_file:
+            pickle.dump(updated_lines, new_file)
+
