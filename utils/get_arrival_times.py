@@ -122,6 +122,7 @@ def append_arrival_times(input_file, output_file):
     # Then, each line is modified with its corresponding arrival times, and re-reversed
     
     heading = 1 # northbound
+    counter = 3
     
     for stop in route_stops[1]:
         arrivals_dict[stop] = None
@@ -209,6 +210,11 @@ def append_arrival_times(input_file, output_file):
         os.makedirs(os.path.dirname(output_file), exist_ok=True)
         with gzip.open(output_file + '.gz', 'wb') as new_file:
             pickle.dump(updated_lines, new_file)
+
+        if counter > 0:
+            with open("data/processed_data/arrival_data/arrival_times.json", "w") as f:
+                json.dump(updated_lines, f)
+            counter += 1
 
 def find_most_recent_stop(path_progress, de_facto_heading):
     '''
