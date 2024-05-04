@@ -68,6 +68,8 @@ def find_progress(lat, lon, points=points, distances=distances, total_distance=t
     return progress, closest_point
 
 
+
+# we only used this to get constants, no need to keep it
 def prepare_data(path):
     points = [(path[i], path[i+1]) for i in range(0, len(path), 2)]
     distances = []
