@@ -31,8 +31,10 @@ def add_bus_data(dataset, file_path, predictions_only=False):
                 raw_processed_datapoint["lastStop"],
                 raw_processed_datapoint["dayPercent"],
                 raw_processed_datapoint["weekday"],
-                raw_processed_datapoint["arrivals"] # this is a dictionary containing 32 ground truths!
+                
             ]
+            clean_datapoint.extend(raw_processed_datapoint["estimatedTimes"].values())
+            clean_datapoint.append(raw_processed_datapoint["arrivals"]) # this is a dictionary containing 32 ground truths!
 
         dataset.append(clean_datapoint)
 
@@ -77,3 +79,4 @@ def load_estimate_dataset(route=1):
 if __name__ == '__main__':
     dataset = load_dataset()
     print(len(dataset))
+    print(dataset[1000])
