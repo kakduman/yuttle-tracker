@@ -15,6 +15,9 @@ def add_bus_data(dataset, file_path, predictions_only=False):
         if "arrivals" not in raw_processed_datapoint:
             continue
 
+        if None in raw_processed_datapoint["arrivals"].values():
+            continue
+
         if predictions_only:
             clean_datapoint = [
                 {int(k): v for k, v in raw_processed_datapoint["estimatedTimes"].items()},
@@ -72,5 +75,5 @@ def load_estimate_dataset(route=1):
 
 
 if __name__ == '__main__':
-    dataset = load_estimate_dataset()
-    print(dataset[100])
+    dataset = load_dataset()
+    print(dataset[43801])
