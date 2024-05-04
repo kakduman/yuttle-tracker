@@ -40,8 +40,8 @@ def append_arrival_times(input_file, output_file):
             # if this occurred on Monday, April 22 (1716350400 - 1716436799), get rid of it because the protests messed up our data
             if 1716350400 <= line["lastUpdate"] <= 1716436799:
                 continue
+            
             # this is for arrivals after 6pm, which are None
-
             if type(line['dayPercent']) != float:
                 continue
             
@@ -61,6 +61,7 @@ def append_arrival_times(input_file, output_file):
                     try:
                         arrival_estimate = round(estimate_in_dayTime + line["dayPercent"], 5)
                         line["estimatedTimes"][estimate] = arrival_estimate
+                        line["arrivals"] = dict(arrivals_dict)
                         updated_lines.append(line)
                     except Exception as e:
                         print(f"Error appending updated lines: {e}")
