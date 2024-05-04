@@ -12,6 +12,9 @@ def read_compressed_data(file_path):
 def add_bus_data(dataset, file_path):
     raw_processed_data = read_compressed_data(file_path)
     for raw_processed_datapoint in raw_processed_data:
+        if "arrivals" not in raw_processed_datapoint:
+            continue
+
         clean_datapoint = [
             raw_processed_datapoint["pathPercent"],
             raw_processed_datapoint["sinProgress"],
@@ -74,5 +77,5 @@ def load_estimate_dataset(route=1):
 
 
 if __name__ == '__main__':
-    dataset = load_estimate_dataset()
+    dataset = load_dataset()
     print(dataset[100])
