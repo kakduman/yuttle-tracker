@@ -12,20 +12,30 @@ def read_compressed_data(file_path):
     return data
 
 def add_bus_data(dataset, file_path):
-    raw_data = read_compressed_data(file_path)
-    for raw_datapoint in raw_data:
+    raw_processed_data = read_compressed_data(file_path)
+    for raw_processed_datapoint in raw_processed_data:
         clean_datapoint = [
-            raw_datapoint["pathPercent"],
-            raw_datapoint["sinProgress"],
-            raw_datapoint["cosProgress"],
-            raw_datapoint["lastStop"],
-            raw_datapoint["dayPercent"],
-            raw_datapoint["weekday"],
-            raw_datapoint["estimatedTimes"] # this is a dictionary containing 32 ground truths!
+            raw_processed_datapoint["pathPercent"],
+            raw_processed_datapoint["sinProgress"],
+            raw_processed_datapoint["cosProgress"],
+            raw_processed_datapoint["lastStop"],
+            raw_processed_datapoint["dayPercent"],
+            raw_processed_datapoint["weekday"],
+            raw_processed_datapoint["estimatedTimes"] # this is a dictionary containing 32 ground truths!
         ]
         dataset.append(clean_datapoint)
 
 def load_dataset(route=1):
+    """
+    Loads the processed, compressed data for a given route into an array
+
+    Args:
+        route (int): The route number to load data for. Defaults to 1 (blue)
+
+    Returns:
+        N x d array; d = 7 with the first 6 as inputs and the last column as a dictrionary of ground truths, one for each stop on the route
+
+    """
     dataset = []
     for filename in os.listdir(DATA_DIRECTORY):
         if filename.startswith(f"bus_{route}_") and filename.endswith(".json.gz"):
