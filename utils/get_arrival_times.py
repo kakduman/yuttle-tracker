@@ -39,6 +39,7 @@ def append_arrival_times(input_file, output_file, route=1):
     # Function goes in reverse order, finding when the lastStop changed and adding this time to an arrivals dict
     # Then, each line is modified with its corresponding arrival times, and re-reversed
     
+    heading = 1
     reset_arrivals_dict(arrivals_dict, route)
 
     with open(input_file, "r") as file:
@@ -55,7 +56,6 @@ def append_arrival_times(input_file, output_file, route=1):
 
             if is_line_invalid(line):
                 continue
-
             
             # we're actually going to process this point. Might not add it to data, but we need to process it in some way
             unix_time = line["lastUpdate"]
