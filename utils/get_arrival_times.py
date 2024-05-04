@@ -94,10 +94,10 @@ def append_arrival_times(input_file, output_file):
                 try:
                     arrival_estimate = round(estimate_in_dayTime + line["dayPercent"], 5)
                     line["estimatedTimes"][estimate] = arrival_estimate
-                    updated_lines.append(line)
                 except Exception as e:
                     print(f"Error appending updated lines: {e}")
                     continue
+            updated_lines.append(line)
         updated_lines.reverse()
         
         # save to a new file .json, make directory if it doesn't exist
