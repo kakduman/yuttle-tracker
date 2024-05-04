@@ -17,7 +17,7 @@ def add_bus_data(dataset, file_path, predictions_only=False):
 
         if predictions_only:
             clean_datapoint = [
-                {int(k): v for k, v in raw_processed_datapoint["arrivals"].items()},
+                {int(k): v for k, v in raw_processed_datapoint["estimatedTimes"].items()},
                 raw_processed_datapoint["arrivals"] # this is a dictionary containing 32 ground truths!
             ]
         else:
