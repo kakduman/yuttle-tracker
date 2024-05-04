@@ -21,10 +21,15 @@ def append_arrival_times(input_file, output_file):
 
     with open(input_file, "r") as file:
         previously_recorded_stop = None
-        previous_day_percent = 100
+        # unix_time is infinite
+        unix_time = 9999999999
         updated_lines = []
         # reverse the lines
-        lines = file.readlines()
+        try:
+            lines = file.readlines()
+        except Exception as e:
+            print(f"Error reading {input_file}: {e}")
+            return
         lines.reverse()
         for line in lines:
             # convert raw text to dictionary
@@ -32,10 +37,31 @@ def append_arrival_times(input_file, output_file):
             # if this occurred on Monday, April 22 (1716350400 - 1716436799), get rid of it because the protests messed up our data
             if 1716350400 <= line["lastUpdate"] <= 1716436799:
                 continue
+            # this is for arrivals after 6pm, which are None
+
+            if type(line['dayPercent']) != float:
+                continue
+            
+            # when the date changes (time decreases by MORE than 10800 in one go), reset the arrivals_dict
+            if line["lastUpdate"] < (unix_time - 10800):
+                # reset arrivals_dict
+                for stop in route_stops[1]:
+                    arrivals_dict[stop] = None
+
+            # update unix_time
+            unix_time = line["lastUpdate"]
+            
             if not previously_recorded_stop:
                 previously_recorded_stop = line["lastStop"]
-                updated_lines.append(line)
-                
+                for estimate in line["estimatedTimes"]:
+                    estimate_in_dayTime = line["estimatedTimes"][estimate] / 660
+                    try:
+                        arrival_estimate = round(estimate_in_dayTime + line["dayPercent"], 5)
+                        line["estimatedTimes"][estimate] = arrival_estimate
+                        updated_lines.append(line)
+                    except Exception as e:
+                        print(f"Error appending updated lines: {e}")
+                        continue
                 continue
             current_stop = line["lastStop"]
             if current_stop != previously_recorded_stop:
@@ -45,10 +71,19 @@ def append_arrival_times(input_file, output_file):
             # append arrivals_dict to the line
             # copied because it avoids future changes from affecting it, since dict is mutable
             line["arrivals"] = dict(arrivals_dict)
-            updated_lines.append(line)
-        updated_lines.reverse()
+            for estimate in line["estimatedTimes"]:
+                estimate_in_dayTime = line["estimatedTimes"][estimate] / 660
+                try:
+                    arrival_estimate = round(estimate_in_dayTime + line["dayPercent"], 5)
+                    line["estimatedTimes"][estimate] = arrival_estimate
+                    updated_lines.append(line)
+                except Exception as e:
+                    print(f"Error appending updated lines: {e}")
+                    continue
+            updated_lines.reverse()
         
         # save to a new file as pretty json, make directory if it doesn't exist
         os.makedirs(os.path.dirname(output_file), exist_ok=True)
         with open(output_file, "w") as new_file:
             json.dump(updated_lines, new_file, indent=4)
+            
