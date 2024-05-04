@@ -45,11 +45,17 @@ def append_arrival_times(input_file, output_file):
             if type(line['dayPercent']) != float:
                 continue
             
+            # if we don't know the line's lastStop, get rid of that data point. We're not sure why sometimes they have lastStop = 0...
+            if line["lastStop"] == 0:
+                continue
+            
             # when the date changes (time decreases by MORE than 10800 in one go), reset the arrivals_dict
             if line["lastUpdate"] < (unix_time - 10800):
                 # reset arrivals_dict
                 for stop in route_stops[1]:
                     arrivals_dict[stop] = None
+            
+
 
             # update unix_time
             unix_time = line["lastUpdate"]
