@@ -66,9 +66,7 @@ def find_progress(lat, lon, points=points, distances=distances, total_distance=t
     progress = closest_segment_fraction / total_distance
     return progress, closest_point
 
-
-
-# we only used this to get constants, no need to keep it
+# we only used this to get the constants at the top of the file
 def prepare_data(path):
     points = [(path[i], path[i+1]) for i in range(0, len(path), 2)]
     distances = []
