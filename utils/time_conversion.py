@@ -16,25 +16,15 @@ def convert_to_fraction_of_day(unix_time):
     Returns:
     float: The fraction of the day, or None if the UNIX timestamp is outside the range 7 AM to 6 PM.
     '''
-    # Convert UNIX timestamp to a datetime object in UTC
+
     edt = pytz.timezone('America/New_York')
     current_time_edt = datetime.datetime.now(pytz.utc).astimezone(edt)
-    
-    # Define the start and end times (7 AM to 6 PM EDT)
     start_time = datetime.datetime.combine(current_time_edt.date(), datetime.time(7, 0)).astimezone(edt)
     end_time = datetime.datetime.combine(current_time_edt.date(), datetime.time(18, 0)).astimezone(edt)
-    
-    # Calculate the total seconds in the range 7 AM to 6 PM
     total_seconds = (end_time - start_time).total_seconds()
-    # print(total_seconds)
-    
-    # Calculate the seconds since 7 AM
     seconds_since_start = (current_time_edt - start_time).total_seconds()
-    # print(seconds_since_start)
     
-    # Normalize the seconds since 7 AM by the total seconds to get a fraction
     if seconds_since_start < 0 or seconds_since_start > total_seconds:
-        # Time is outside the 7 AM to 6 PM range
         return None
     else:
         fraction_of_day = seconds_since_start / total_seconds

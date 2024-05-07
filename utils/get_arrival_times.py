@@ -15,10 +15,6 @@ def is_line_invalid(line):
     if type(line['dayPercent']) != float:
         return True
     
-    # # if we don't know the line's lastStop, get rid of that data point. We're not sure why sometimes they have lastStop = 0...
-    # if line["lastStop"] == 0:
-    #     return True
-    
     return False
 
 def reset_arrivals_dict(arrivals_dict, route):
@@ -62,10 +58,6 @@ def append_arrival_times(input_file, output_file, route=1):
                 heading = 1
             elif 0.94 < line["pathPercent"]:
                 heading = 0
-                
-            # if line["lastStop"] == 0:
-            #     unix_time = line["lastUpdate"]
-            #     continue
                 
             line["lastStop"] = find_most_recent_stop(line["pathPercent"], heading)
                 
@@ -126,14 +118,12 @@ def find_most_recent_stop(path_progress, de_facto_heading):
             
     # then sort dictionary by values, 
     route_stop_progress = dict(sorted(route_stop_progress.items(), key=lambda item: item[1]))
-    # print(route_stop_progress)
     
     # then go in order and return first one we're not smaller than by 0.01
     # keeping track of the previous one, so we can return that when we achieve our condition
     prev_stop = 106 # 106 is the largest stop number
     for stop in route_stop_progress:
         if path_progress < route_stop_progress[stop] + 0.008:
-            # print(prev_stop)
             return prev_stop
         prev_stop = stop
     raise Exception("No stop found!")

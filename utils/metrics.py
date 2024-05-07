@@ -25,10 +25,7 @@ def calculate_metrics(estimated_times, arrivals):
     except:
         return None, None
     
-    # Calculate Mean Absolute Error (MAE)
     mae = np.mean(np.abs(differences))
-    
-    # Calculate Mean Squared Error (MSE)
     mse = np.mean(np.square(differences))
     
     return mae, mse
@@ -65,7 +62,6 @@ def calculate_mae_data(predicted_times, true_arrivals):
 
 if __name__ == '__main__':
     dataset = ld.load_estimate_dataset()
-    # print(dataset[0])
 
     metrics = [calculate_metrics(pair[0], pair[1]) for pair in dataset if pair[0] and pair[1]]
     valid_metrics = [m for m in metrics if m[0] is not None and m[1] is not None]
